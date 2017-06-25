@@ -1,5 +1,8 @@
 const db = chrome.storage.sync;
+
 let tagInput = null;
+let lastTag = '';
+
 function setupTagInput() {
   tagInput = document.createElement("input");
   tagInput.setAttribute("type", "text")
@@ -23,7 +26,9 @@ function keyDownListener(e) {
 function keyPressListener(e) {
   if (e.which == 13) {
     // Enter pressed
+    lastTag = e.target.value;
     console.log('Adding a tag...', e.target.value);
+
     const messageRequest = {
       type: "note",
       tag: e.target.value,
@@ -47,7 +52,7 @@ function mouseupListener() {
     tagInput.style.top = `${topOffset}px`;
     tagInput.style.left = `${leftOffset}px`;
     tagInput.style.display = "block";
-    tagInput.value = "";
+    tagInput.value = lastTag;
   }
   else if (event.target !== tagInput) {
     tagInput.style.display = "none";
