@@ -30,8 +30,7 @@
         "http://*/*",
         "https://*/*"
       ],
-      "css":["css/popup.css"],
-      "js": ["js/libs/jquery.min.js", "content_script.js"],
+      "js": ["content_script.js"],
       "run_at": "document_end"
     }
   ]
