@@ -1,18 +1,23 @@
-</!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 
+
 <script>
+
+
 var json = {  
    "Pages":[  
       {  
          "url":"linkedin.com/marc-andreesen",
-         "ParentPageID":null
+         "ParentPageID":null,
+         "Notes": [0, 1]
+
       },
       {  
          "url":"https://en.wikipedia.org/wiki/Marc_Andreessen",
-         "ParentPageID":0
+         "ParentPageID":0,
+         "Notes": [2]
       }
    ],
    "Notes":[  
@@ -37,31 +42,48 @@ var json = {
    ]
 }
 
+function printNotes(note, id) {
+   $("#page" + note.PageID).append('<div id=note' + id + '> ' + note.Content + '</div>');
+}
 
-function printPage (page){
-		$(".pages").append('jjh');
-		console.log("hi");
-	$(".pages").append('<div> <a href="' + page.url + '">' + page.ParentPageID + "</a> </div>");
+function printPage(page, id, parentPage) {
+   if (parentPage == null) {
+      $(".pages").append('<div id=page' + id + '> <a href="' + page.url + '">' + page.url + "</a> ");
+   } else {
+      $("#page" + parentPage).append('<div id=page' + id + '> <a href="' + page.url + '">' + page.url + "</a> ");
+   }
+
+   $.each(page.Notes, function(k, v) {
+      printNotes(json.Notes[v], v);
+   }); 
+
+   $.each(page["ChildrenID"], function(k, v) {
+      printPage(json.Pages[v], v, id);
+   });
+
+   $(".pages").append("</div>");
 
 }
 
 
 $( document ).ready(function() {
+
 	$.each(json.Pages, function( k, v ) {
 
 		v["ChildrenID"] = [];
-	//	printPage(v);
 	  console.log( "Key: " + k + ", Value: " + v );
 	});
 
 	$.each(json.Pages, function( k, v ) {
-	if	(v.ParentPageID){
-		json.Pages[v.ParentPageID]["ChildrenID"].append(k);
+	if	(v.ParentPageID != null){
+		json.Pages[v.ParentPageID]["ChildrenID"].push(k);
 	}
 	});
 
 	$.each(json.Pages, function(k, v) {
-
+      if (v.ParentPageID == null) {
+         printPage(v, k, null);
+      }
 	});
 
 
@@ -74,7 +96,9 @@ $( document ).ready(function() {
 	<title></title>
 </head>
 <body>
-<div class=pages> jh</div>
+<div class=pages></div>
+
+
 
 </body>
 </html>
