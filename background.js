@@ -80,10 +80,3 @@ function getLastFocusTabUrl(callback) {
     callback(tabs[0].url);
   });
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-  chrome.windows.create({
-    url: "chrome://newtab",
-    type: "normal"
-  });
-});
