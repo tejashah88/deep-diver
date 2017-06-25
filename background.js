@@ -8,66 +8,9 @@ var isRecording = false;
 
 var startTime, endTime;
 
-function contextMenuOnCreated() {
-  if (chrome.runtime.lastError) {
-    console.log("error creating item:" + chrome.runtime.lastError);
-  } else {
-    console.log("item created successfully");
-  }
-}
-
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-  // check if it's the correct context menu item
-  if (info.menuItemId === "toggleRecordingState") {
-    isRecording = info.checked; // this will be guaranteed to toggle
-
-    /*chrome.contextMenus.update(
-      "toggleRecordingState",
-      {
-        //title: "Recording On",
-        checked: isRecording
-      }
-    );*/
-
-    if (isRecording) {
-      startTime = Date.now();
-    } else {
-      // assuming we were already recording at this time...
-      endTime = Date.now();
-
-      // perform a search for all history links between startTime and endTime
-      chrome.history.search({
-        text: "",
-        startTime: startTime,
-        endTime: endTime
-      }, function(historyResults) {
-        for (var hresult of historyResults) {
-          chrome.history.getVisits({ url: hresult.url }, function(visitResults) {
-            console.log(JSON.stringify({
-              id: hresult.id,
-              type: visitResults[0].transition,
-              url: hresult.url,
-              lastVisitTime: hresult.lastVisitTime
-            }, null, 2));
-          });
-        }
-      });
-    }
-  }
-});
-
-
-function setupContextMenu() {
-  chrome.contextMenus.create({
-    id: "toggleRecordingState",
-    type: "checkbox",
-    title: "Recording Enabled",
-    contexts: ["all"],
-    checked: false
-  }, contextMenuOnCreated);
-}
-
-setupContextMenu();
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  // changeInfo.url;
+})
 
 /*chrome.browserAction.onClicked.addListener(function(tab) {
   isRecording = !isRecording;
@@ -80,3 +23,66 @@ function getLastFocusTabUrl(callback) {
     callback(tabs[0].url);
   });
 }
+
+function getAllLinksInPage() {
+  var urls = [];
+  for (var i = document.links.length; i-- > 0;)
+    urls.push(document.links[i].href);
+
+  return urls;
+}
+
+/*document.addEventListener('DOMContentLoaded', function() {
+  chrome.windows.create({
+    url: "chrome://newtab",
+    type: "normal"
+  });
+});*/
+
+/*class Dive {
+  constructor(title) {
+    this.title = title;
+    this.id = "dive_" + Date.now();
+    this.startTime = Date.now();
+    this.endTime = null;
+    this.pages = [];
+    this.notes = [];
+  }
+
+  addNote(note) {
+    this.notes.push(note);
+  }
+
+  addPage(page) {
+    this.pages.push(page);
+  }
+
+  exportToJson() {
+    return //something;
+  }
+}
+
+class Page {
+  constructor(url, parentPage) {
+    this.url = url;
+    this.parentPage = parentPage;
+  }
+}
+
+class Note {
+  constructor(tag, content, pageId) {
+    this.tag = tag;
+    this.content = content;
+    this.pageId = pageId;
+    this.timestamp = Date.now();
+  }
+}
+
+function createDiveObject(title) {
+  return {
+    title: title
+    startTime: Date.now(),
+    endTime: null,
+    pages: []
+  };
+}*/
