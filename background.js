@@ -39,14 +39,20 @@ function getAllLinksInPage() {
   });
 });*/
 
-/*class Dive {
+class Dive {
   constructor(title) {
     this.title = title;
-    this.id = "dive_" + Date.now();
-    this.startTime = Date.now();
-    this.endTime = null;
     this.pages = [];
     this.notes = [];
+  }
+
+  startRecording() {
+    this.startTime = Date.now();
+    this.id = "dive_" + this.startTime;
+  }
+
+  stopRecording() {
+    this.endTime = Date.now();
   }
 
   addNote(note) {
@@ -58,14 +64,52 @@ function getAllLinksInPage() {
   }
 
   exportToJson() {
-    return //something;
+    var json = {
+      title: this.title,
+      id: this.id,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      pages: [],
+      notes: []
+    }
+
+    for (var page of this.pages) {
+      json.pages.push(page.exportToJson());
+    }
+
+    for (var note of this.notes) {
+      json.notes.push(note.exportToJson());
+    }
   }
 }
 
 class Page {
-  constructor(url, parentPage) {
-    this.url = url;
-    this.parentPage = parentPage;
+  constructor(params) {
+    this.url = params.url;
+    this.parentPageId = params.parentPageId;
+    this.noteRefs = [];
+  }
+
+  addNoteRef(ref) {
+    this.noteRefs.push(ref);
+  }
+
+  addNoteRefs(refs) {
+    this.noteRefs.push(...refs);
+  }
+
+  exportToJson() {
+    var json = {
+      url: this.url,
+      parentPageId: this.parentPageId,
+      notes: []
+    };
+
+    for (var noteRef of this.noteRefs) {
+      json.notes.push(noteRef.exportToJson());
+    }
+
+    return json;
   }
 }
 
@@ -76,13 +120,13 @@ class Note {
     this.pageId = pageId;
     this.timestamp = Date.now();
   }
-}
 
-function createDiveObject(title) {
-  return {
-    title: title
-    startTime: Date.now(),
-    endTime: null,
-    pages: []
-  };
-}*/
+  exportToJson() {
+    return {
+      tag: this.tag,
+      content: this.content,
+      pageId: this.pageId,
+      timestamp: this.timestamp
+    };
+  }
+}
