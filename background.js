@@ -1,11 +1,5 @@
-chrome.browserAction.onClicked.addListener(function(tab) { alert('icon clicked')});
-
-document.addEventListener('DOMContentLoaded', function() {
-  //renderStatus('LOL');
-  console.log("LOL");
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log('received request', request);
+    const note = request.note;
+    const requesterTab = sender.tab;
 });
-
-
-function renderStatus(statusText) {
-  document.getElementById('status').textContent = statusText;
-}
