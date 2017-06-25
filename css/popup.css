@@ -1,7 +1,9 @@
 .container {
   width: 300px;
+  height: 400px;
   text-align: center;
-  padding-top: 5%;
+  padding: 5%;
+  overflow: auto;
 }
 
 .btn-block {
