@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Deep Dive Recorder",
+  "version": "0.1",
+  "description": "Records user activity with a click of a button.",
+  //"icons": { "128": "icon_128.png" },
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+  "permissions": [],
+  "browser_action": {
+    //"default_title": "",
+    "default_icon": "icon.png"
+    //"default_popup": "frontend.html"
+  }
+}
