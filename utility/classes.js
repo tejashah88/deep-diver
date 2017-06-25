@@ -2,7 +2,6 @@ class Dive {
   constructor(title) {
     this.title = title;
     this.pages = [];
-    this.notes = [];
   }
 
   startRecording() {
@@ -12,10 +11,6 @@ class Dive {
 
   stopRecording() {
     this.endTime = Date.now();
-  }
-
-  addNote(note) {
-    this.notes.push(note);
   }
 
   addPage(page) {
@@ -28,16 +23,11 @@ class Dive {
       id: this.id,
       startTime: this.startTime,
       endTime: this.endTime,
-      pages: [],
-      notes: []
+      pages: []
     }
 
     for (var page of this.pages) {
       json.pages.push(page.exportToJson());
-    }
-
-    for (var note of this.notes) {
-      json.notes.push(note.exportToJson());
     }
   }
 }

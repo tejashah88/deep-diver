@@ -1,6 +1,6 @@
 const db = chrome.storage.sync;
 
-$( document ).ready(function() {
+$(document).ready(function() {
   loadMainButton();
   loadDives();
 });
