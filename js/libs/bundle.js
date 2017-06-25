@@ -22106,10 +22106,9 @@ function loadDataFromChromeStorage(callback) {
     chrome.storage.sync.get(['notes', 'pages', 'dives'], function (results) {
         var callbackData = {
             dive: results.dives[dive_id],
-            notes: results.notes,
-            pages: results.pages
+            notes: results.notes[dive_id],
+            pages: results.pages[dive_id],
         };
-        debugger;
         callback(callbackData);
     });
 }
@@ -22163,7 +22162,6 @@ function makeTreeDataFromTagNodes(title, tagNodes) {
 loadDataFromChromeStorage(function (data) {
     var tagNodes = makeTagNodes(data.notes, data.pages);
     var treeData = makeTreeDataFromTagNodes(data.dive.title, tagNodes);
-    debugger;
     ReactDOM.render(React.createElement(Root, { initialTreeData: treeData }), document.getElementById('react-root'));
 });
 var Root = (function (_super) {
@@ -22175,10 +22173,19 @@ var Root = (function (_super) {
         };
         return _this;
     }
+    Root.prototype.componentDidUpdate = function (prevProps, prevState) {
+        var links = document.getElementByClassName("rst__rowSubtitle");
+        for (var i = 0; i < links.length; i++) {
+            links[i].onclick = function (e) {
+                console.log('link clicked!');
+                window.open(e.target.innerText);
+            };
+        }
+    };
     Root.prototype.render = function () {
         var _this = this;
         return (React.createElement("div", { style: { height: 1000 } },
-            React.createElement("p", null, "This is in React!!"),
+            React.createElement("img", { src: "../images/diver.png", width: 400 }),
             React.createElement(react_sortable_tree_1.default, { treeData: this.state.treeData, onChange: function (treeData) { return _this.setState({ treeData: treeData }); } })));
     };
     return Root;

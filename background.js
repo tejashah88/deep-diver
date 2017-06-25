@@ -2,6 +2,7 @@ const db = chrome.storage.sync;
 
 // Initialize isRecording
 var isRecording = null;
+let mostRecentDive = null;
 db.get('active_dive', (result) => isRecording = !!result.active_dive);
 
 var startTime, endTime;
@@ -50,12 +51,16 @@ function transformDataToStruct(notes, url_clicks) {
     }
   }
 
-  db.get('active_dive', (result) => {
-    const active_dive_id = result.active_dive;
+  db.get(['active_dive', 'notes', 'pages'], (result) => {
+    const storageNotes = result.notes || new Object();
+    const storagePages = result.pages || new Object();
+
+    storageNotes[mostRecentDive] = notes;
+    storagePages[mostRecentDive] = pages;
 
     const toWrite = {
-      notes: notes,
-      pages: pages
+      notes: storageNotes,
+      pages: storagePages
     };
 
     db.set(toWrite, () => console.log('notes/pages saved'));
@@ -65,11 +70,14 @@ function transformDataToStruct(notes, url_clicks) {
 chrome.storage.onChanged.addListener(function(changes, areaName) {
   if (areaName === "sync" && 'active_dive' in changes) {
     isRecording = !!changes['active_dive'].newValue;
+
     console.log("New recording,", isRecording);
     if (!isRecording) {
       // We just stopped recording, let's write data
       console.log('we just stopped recording');
       transformDataToStruct(notes, url_clicks);
+    } else {
+      mostRecentDive = changes['active_dive'].newValue;
     }
   }
 });
