@@ -36,7 +36,7 @@ function loadDives() {
           })
         );
       });
-    }
+    } else $('#past-dives').text('Nothing to see here.');
   });
 }
 
@@ -48,12 +48,8 @@ function loadDeleteButton() {
     .text('Clear Dives')
     .click(function() {
       db.clear(function () {
-        var error = chrome.runtime.lastError;
-        if (error) console.log(error);
-        else {
-          loadMainButton();
-          loadDives();
-        }
+        loadMainButton();
+        loadDives();
       });
     })
   );
@@ -102,6 +98,7 @@ function stopDiveButton() {
 
         db.set({'active_dive': null, 'dives': dives}, function() {
           loadMainButton();
+          loadDives();
         });
       });
     });
