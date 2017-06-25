@@ -20,13 +20,15 @@ function setupTagInput() {
   tagInput = document.createElement("input");
   tagInput.setAttribute("type", "text")
   tagInput.style.position = 'absolute';
-  tagInput.style["z-index"] = 10000;
+  tagInput.style["z-index"] = 10000000;
   tagInput.style.display = "none";
   tagInput.style.border = "2px solid #ccc";
   tagInput.style["border-radius"] = "4px";
   tagInput.placeholder = "Enter a tag...";
   tagInput.style.width = "120px";
   tagInput.style.padding = "5px";
+  tagInput.style.background = "white";
+  tagInput.style["font-family"] = "Helvetica";
   document.body.appendChild(tagInput);
 }
 
