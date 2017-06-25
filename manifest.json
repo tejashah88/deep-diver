@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Deep Dive",
+  "name": "Diver",
   "version": "0.1",
-  "description": "Records user activity with a click of a button.",
+  "description": "Automatic note organization.",
   "icons": {
     "128": "images/icon.png"
   },
@@ -20,7 +20,7 @@
     "storage"
   ],
   "browser_action": {
-    "default_title": "Deep Dive",
+    "default_title": "Diver",
     "default_icon": "images/icon.png",
     "default_popup": "html/popup.html"
   },
