@@ -9,7 +9,8 @@ function loadMainButton() {
   $('#active-dive').empty();
 
   db.get('active_dive', function(result) {
-    var shouldAddStopButton = result && result.active_dive !== null;
+    var shouldAddStopButton = result && result.active_dive;
+    console.log('active_dive', result);
     $('#active-dive').append(shouldAddStopButton ? stopDiveButton() : startDiveButton());
   });
 }
@@ -47,7 +48,7 @@ function startDiveButton() {
 
       db.get('dives', function(result) {
         const dives = result.dives || new Object();
-        dives.key = dive;
+        dives[key] = dive;
 
         db.set({'active_dive': key, 'dives': dives}, function() {
           loadMainButton();
@@ -68,7 +69,7 @@ function stopDiveButton() {
       db.get(['active_dive', 'dives'], function(result) {
         const key = result.active_dive;
         const dives = result.dives
-        dives.key.endTime = Date.now();
+        dives[key].endTime = Date.now();
 
         db.set({'active_dive': null, 'dives': dives}, function() {
           loadMainButton();

@@ -1,7 +1,15 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('received request', request);
+    if (request.request == 'get-active-dive') {
+      chrome.storage.sync.get('active_dive', (result) => {
+        const active_dive = result.active_dive;
+        sendResponse({active_dive: active_dive});
+        return true;
+      });
+    }
+
     const note = request.note;
     const requesterTab = sender.tab;
+    return true;
 });
 
 var isRecording = false;
