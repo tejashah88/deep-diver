@@ -8,25 +8,32 @@ $( document ).ready(function() {
 function loadMainButton() {
   $('#active-dive').empty();
 
-  db.get('active_dive', function(result) {
-    var shouldAddStopButton = result && result.active_dive;
+  db.get(['active_dive', 'dives'], function(result) {
+    var shouldShowStopButton = result && result.active_dive;
     console.log('active_dive', result);
-    $('#active-dive').append(shouldAddStopButton ? stopDiveButton() : startDiveButton());
+    if (shouldShowStopButton) {
+      $('#dive-title-input').val(result.dives[result.active_dive].title);
+      $('#dive-title-input').prop('disabled', true);
+    }
+    $('#active-dive').append(shouldShowStopButton ? stopDiveButton() : startDiveButton());
   });
 }
 
 function loadDives() {
-  const dives = ['Mr. Robot Dive', 'Pizza Dive', 'In N Out Dive'];
-  dives.forEach(function(diveId) {
-    $('#past-dives').append(
-      $('<button>')
-      .addClass('btn btn-default btn-primary btn-sm btn-block')
-      .attr('href', '#')
-      .text(diveId)
-      .click(function() {
-        chrome.tabs.create({ url: '../html/dive_visualization.html?dive_id=' + diveId });
-      })
-    );
+  db.get('dives', function(result) {
+    if (result && result.dives) {
+      Object.keys(result.dives).forEach(function (key) {
+        $('#past-dives').append(
+          $('<button>')
+          .addClass('btn btn-default btn-primary btn-sm btn-block')
+          .attr('href', '#')
+          .text(result.dives[key].title)
+          .click(function() {
+            chrome.tabs.create({ url: '../html/dive_visualization.html?dive_id=' + key });
+          })
+        );
+      });
+    }
   });
 }
 
@@ -36,7 +43,7 @@ function startDiveButton() {
     .addClass('btn btn-success btn-circle')
     .text('Start')
     .click(function() {
-      $('#dive-title-input').prop("disabled", true);
+      $('#dive-title-input').prop('disabled', true);
 
       const key = Date.now();
       const dive = {
@@ -64,7 +71,7 @@ function stopDiveButton() {
     .text('Stop')
     .click(function() {
       $('#dive-title-input').val('');
-      $('#dive-title-input').prop("disabled", false);
+      $('#dive-title-input').prop('disabled', false);
 
       db.get(['active_dive', 'dives'], function(result) {
         const key = result.active_dive;
