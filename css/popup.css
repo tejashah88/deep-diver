@@ -19,3 +19,8 @@
 .btn:hover {
   cursor: pointer;
 }
+
+input {
+    !width: 600px;
+
+}
