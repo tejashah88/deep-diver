@@ -1,5 +1,5 @@
 const db = chrome.storage.sync;
-
+debugger;
 let tagInput = null;
 function setupTagInput() {
   tagInput = document.createElement("input");
@@ -26,7 +26,7 @@ function keyPressListener(e) {
     // Enter pressed
     console.log('Adding a tag...', e.target.value);
     const messageRequest = {
-      type: "note"
+      type: "note",
       tag: e.target.value,
       content: document.getSelection().toString(),
       pageUrl: document.URL
