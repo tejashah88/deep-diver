@@ -35,9 +35,11 @@ function startDiveButton() {
     .addClass('btn btn-success btn-circle')
     .text('Start')
     .click(function() {
+      $('#dive-title-input').prop("disabled", true);
+
       const key = Date.now();
       const dive = {
-        title: "Fuck yeah",
+        title: $('#dive-title-input').val(),
         pages: [],
         startTime: key,
         endTime: null
@@ -60,6 +62,8 @@ function stopDiveButton() {
     .addClass('btn btn-danger btn-circle')
     .text('Stop')
     .click(function() {
+      $('#dive-title-input').val('');
+
       db.get(['active_dive', 'dives'], function(result) {
         const key = result.active_dive;
         const dives = result.dives
