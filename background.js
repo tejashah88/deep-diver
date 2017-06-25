@@ -2,28 +2,7 @@ const db = chrome.storage.sync;
 var isRecording = false;
 var startTime, endTime;
 
-function getCurrTabUrl(callback) {
-  chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
-    callback(tabs[0].url);
-  });
-}
-
-function getAllLinksInPage() {
-  var urls = [];
-  for (var i = document.links.length; i-- > 0;)
-    urls.push(document.links[i].href);
-
-  return urls;
-}
-
-function tabLinkListener(tabId, changeInfo, tab) {
-  var data = {
-  };
-
-  if (undefined !== changeInfo.url) {
-    var new_curr_url = changeInfo.url;
-  }
-}
+var pages = [];
 
 /*
 Pages:
@@ -41,36 +20,57 @@ Pages:
 ]
 */
 
-function startRecording() {
-  /*
-   Steps (starting with google search site)
-   1. start tab link listener
-   2. get current tab url
-   3. get all possible urls to click
-   */
-  
-  chrome.tabs.onUpdated.addListener(tabLinkListener);
-
-  getCurrTabUrl((curr_url) => {
-    ;
-  })
-}
-
-function stopRecording() {
-  chrome.tabs.onUpdated.removeListener(tabLinkListener);
-}
+var url_path_info = [];
+var notes_info = [];
 
 chrome.storage.onChanged.addListener(function(changes, areaName) {
   if (areaName === "sync") {
+    var old_isRecording;
     isRecording = changes['active_dive'].newValue !== null;
+    console.log("Recording is enabled: " + isRecording);
+    /*if (old_isRecording !== isRecording) {
+      if (isRecording) {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    }*/
   }
 });
 
 function messageListener(request, sender, sendResponse) {
+  if (!isRecording)
+    return true;
+
+  console.log("request.type == " + request.type)
+
   if (request.type === "note") {
     const content = request.content;
     const tag = request.tag;
     const pageUrl = request.pageUrl;
+    const timestamp = request.timestamp;
+
+    if (isRecording) {
+      notes_info.push({
+        content: content,
+        tag: tag,
+        pageUrl: pageUrl,
+        timestamp: timestamp
+      });
+      console.log(notes_info);
+    }
+
+    const requesterTab = sender.tab;
+    return true;
+  } else if (request.type === "url") {
+    const currUrl = request.currentUrl;
+    const nestedUrls = request.nestedUrls;
+    const timestamp = request.timestamp;
+
+    if (isRecording){
+      url_path_info.push(...[currUrl, nestedUrls, timestamp]);
+      console.log(url_path_info);
+    }
 
     const requesterTab = sender.tab;
     return true;
