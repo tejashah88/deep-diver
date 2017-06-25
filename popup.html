@@ -2,27 +2,21 @@
 <html>
 
 <head>
-  <title>Deep Dive Thing</title>
-  <style>
-    body {
-      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-      font-size: 100%;
-    }
-
-    #status {
-      /* avoid an excessively wide status text */
-      white-space: pre;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: 400px;
-    }
-  </style>
+  <title>Deep Dive</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="background.js"></script>
 </head>
 
 <body>
-  <div id="status">
-    <h1>Test boi</h1>
+  <div class="title">
+    <h2>Deep Dives</h2>
+  </div>
+  <div id="active-dives">
+    <div class="dive">
+      <a href="/dive_visualization.html">Dive 1</a>
+      <span>Dive 2</span>
+      <span>Dive 3</span>
+    </div>
   </div>
 </body>
 

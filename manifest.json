@@ -3,12 +3,18 @@
   "name": "Deep Dive Recorder",
   "version": "0.1",
   "description": "Records user activity with a click of a button.",
-  "icons": { "128": "icon.png" },
+  "icons": {
+    "128": "icon.png"
+  },
   "background": {
     "persistent": false,
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
-  "permissions": [],
+  "permissions": [
+    "tabs"
+  ],
   "browser_action": {
     "default_title": "Deep Dive",
     "default_icon": "icon.png",
