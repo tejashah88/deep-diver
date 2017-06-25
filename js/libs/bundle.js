@@ -22101,45 +22101,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(4);
 var ReactDOM = __webpack_require__(46);
 var react_sortable_tree_1 = __webpack_require__(330);
-// TODO: Pull this from chrome.storage
-var pages = [
-    {
-        url: "https://linkedin.com/marc-andreesen",
-        parentPageID: null,
-        notes: [0, 1],
-    },
-    {
-        url: "https://en. .org/wiki/Marc_Andreessen",
-        parentPageID: 0,
-        notes: [2],
-    },
-];
-// TODO: Pull this from chrome.storage
-var notes = [
-    {
-        content: "Marc Andreessen is a venture capitalist",
-        tag: "experience",
-        timestamp: "12:04pm",
-        pageID: 0,
-    },
-    {
-        content: "Marc Andreessen blah blah",
-        tag: "tech",
-        timestamp: "12:05pm",
-        pageID: 0,
-    },
-    {
-        content: "Marc Andreessen blah blah blah",
-        tag: "tech",
-        timestamp: "12:08pm",
-        pageID: 1,
-    },
-];
+function loadDataFromChromeStorage(callback) {
+    var dive_id = location.href.split("?dive_id=")[1];
+    chrome.storage.sync.get(['notes', 'pages', 'dives'], function (results) {
+        var callbackData = {
+            dive: results.dives[dive_id],
+            notes: results.notes,
+            pages: results.pages
+        };
+        debugger;
+        callback(callbackData);
+    });
+}
 function makeNoteNode(note, pages) {
-    var pageURL = pages[note.pageID].url;
     return {
         title: note.content,
-        subtitle: pageURL,
+        subtitle: note.pageUrl,
         expanded: true,
     };
 }
@@ -22183,16 +22160,18 @@ function makeTreeDataFromTagNodes(title, tagNodes) {
             expanded: true,
         }];
 }
-// TODO: Pull this from chrome.storage
-var title = "Marc Andreessen";
-var tagNodes = makeTagNodes(notes, pages);
-var treeData = makeTreeDataFromTagNodes(title, tagNodes);
+loadDataFromChromeStorage(function (data) {
+    var tagNodes = makeTagNodes(data.notes, data.pages);
+    var treeData = makeTreeDataFromTagNodes(data.dive.title, tagNodes);
+    debugger;
+    ReactDOM.render(React.createElement(Root, { initialTreeData: treeData }), document.getElementById('react-root'));
+});
 var Root = (function (_super) {
     __extends(Root, _super);
     function Root(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            treeData: treeData,
+            treeData: _this.props.initialTreeData,
         };
         return _this;
     }
@@ -22200,14 +22179,10 @@ var Root = (function (_super) {
         var _this = this;
         return (React.createElement("div", { style: { height: 1000 } },
             React.createElement("p", null, "This is in React!!"),
-            React.createElement(react_sortable_tree_1.default, { treeData: this.state.treeData, onChange: function (treeData) {
-                    _this.setState({ treeData: treeData });
-                } })));
+            React.createElement(react_sortable_tree_1.default, { treeData: this.state.treeData, onChange: function (treeData) { return _this.setState({ treeData: treeData }); } })));
     };
     return Root;
 }(React.Component));
-console.log('hey hey');
-ReactDOM.render(React.createElement(Root, null), document.getElementById('react-root'));
 
 
 /***/ }),

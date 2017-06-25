@@ -2,19 +2,17 @@ const db = chrome.storage.sync;
 
 let tagInput = null;
 let lastTag = '';
+let currentTextSelection = "";
 
 window.onload = function() {
-  var observed = document.getElementsByTagName('a');
+    var observed = document.getElementsByTagName('a');
 
-  for (var i = 0; i < observed.length; i++) {
-    observed[i].addEventListener('click', function (e) {
-      var e = window.event || e;
-      sendUrlInfo();
-      //alert('Clicked ' + e.srcElement.innerText);
-
-      //if (e.preventDefault) { e.preventDefault() } else { e.returnValue = false; }
-    }, false);
-  }
+    for (var i = 0; i < observed.length; i++) {
+        observed[i].addEventListener('click', function (e) {
+            debugger;
+            sendUrlInfo(e.target.href);
+        });
+    }
 }
 
 function setupTagInput() {
@@ -40,7 +38,7 @@ function getAllLinksInPage() {
   return urls;
 }
 
-function getCurrentUrl() {
+function getCurrentURL() {
   return document.URL;
 }
 
@@ -50,13 +48,17 @@ function keyDownListener(e) {
   }
 }
 
-function sendUrlInfo() {
+function sendUrlInfo(clickedOnURL) {
   const messageRequest = {
-    type: "url",
-    timestamp: Date.now(),
-    currentUrl: getCurrentUrl(),
-    nestedUrls: getAllLinksInPage()
+    type: "url-clicked",
+    parentURL: getCurrentURL(),
+    childURL: clickedOnURL,
+    timestamp: Date.now()
   };
+
+  debugger;
+
+  console.log('sending url info....', messageRequest);
 
   chrome.runtime.sendMessage(messageRequest, (response) => {
     console.log(response);
@@ -73,7 +75,7 @@ function keyPressListener(e) {
       type: "note",
       timestamp: Date.now(),
       tag: e.target.value,
-      content: document.getSelection().toString(),
+      content: currentTextSelection,
       pageUrl: document.URL
     };
 
@@ -89,6 +91,7 @@ function mouseupListener() {
   const currentSelection = document.getSelection().toString();
   if (currentSelection !== "") {
     // There is text currently selected
+    currentTextSelection = currentSelection;
     const rect = document.getSelection().getRangeAt(0).getBoundingClientRect();
     const topOffset = rect.top + document.body.scrollTop;
     const leftOffset = rect.right + document.body.scrollLeft + 5;
