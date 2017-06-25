@@ -24,7 +24,8 @@ function keyPressListener(e) {
         // Enter pressed
         console.log('Adding a tag...', e.target.value);
         const messageRequest = {
-            note: e.target.value
+            tag: e.target.value,
+            note: document.getSelection().toString()
         };
         chrome.runtime.sendMessage(messageRequest, (response) => {
             console.log(response);
