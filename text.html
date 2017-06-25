@@ -6,8 +6,8 @@
 <script>
 
 
-var json = {  
-   "Pages":[  
+var dive = {
+   "Pages":[
       {  
          "url":"linkedin.com/marc-andreesen",
          "ParentPageID":null,
@@ -54,11 +54,11 @@ function printPage(page, id, parentPage) {
    }
 
    $.each(page.Notes, function(k, v) {
-      printNotes(json.Notes[v], v);
+      printNotes(dive.Notes[v], v);
    }); 
 
    $.each(page["ChildrenID"], function(k, v) {
-      printPage(json.Pages[v], v, id);
+      printPage(dive.Pages[v], v, id);
    });
 
 }
@@ -66,19 +66,19 @@ function printPage(page, id, parentPage) {
 
 $( document ).ready(function() {
 
-	$.each(json.Pages, function( k, v ) {
+	$.each(dive.Pages, function( k, v ) {
 
 		v["ChildrenID"] = [];
 	  console.log( "Key: " + k + ", Value: " + v );
 	});
 
-	$.each(json.Pages, function( k, v ) {
+	$.each(dive.Pages, function( k, v ) {
 	if	(v.ParentPageID != null){
-		json.Pages[v.ParentPageID]["ChildrenID"].push(k);
+		dive.Pages[v.ParentPageID]["ChildrenID"].push(k);
 	}
 	});
 
-	$.each(json.Pages, function(k, v) {
+	$.each(dive.Pages, function(k, v) {
       if (v.ParentPageID == null) {
          printPage(v, k, null);
       }
