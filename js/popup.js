@@ -3,6 +3,7 @@ const db = chrome.storage.sync;
 $(document).ready(function() {
   loadMainButton();
   loadDives();
+  loadDeleteButton();
 });
 
 function loadMainButton() {
@@ -22,6 +23,8 @@ function loadMainButton() {
 function loadDives() {
   db.get('dives', function(result) {
     if (result && result.dives) {
+      $('#past-dives').empty();
+
       Object.keys(result.dives).forEach(function (key) {
         $('#past-dives').append(
           $('<button>')
@@ -35,6 +38,25 @@ function loadDives() {
       });
     }
   });
+}
+
+function loadDeleteButton() {
+  $('#delete-all-dives').append(
+    $('<button>')
+    .addClass('btn btn-danger btn-sm btn-block')
+    .attr('href', '#')
+    .text('Clear Dives')
+    .click(function() {
+      db.clear(function () {
+        var error = chrome.runtime.lastError;
+        if (error) console.log(error);
+        else {
+          loadMainButton();
+          loadDives();
+        }
+      });
+    })
+  );
 }
 
 function startDiveButton() {
