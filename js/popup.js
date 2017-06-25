@@ -63,6 +63,7 @@ function stopDiveButton() {
     .text('Stop')
     .click(function() {
       $('#dive-title-input').val('');
+      $('#dive-title-input').prop("disabled", false);
 
       db.get(['active_dive', 'dives'], function(result) {
         const key = result.active_dive;
