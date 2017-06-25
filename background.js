@@ -67,7 +67,7 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
     isRecording = !!changes['active_dive'].newValue;
     console.log("New recording,", isRecording);
     if (!isRecording) {
-      // We just stopped recording, let's write data 
+      // We just stopped recording, let's write data
       console.log('we just stopped recording');
       transformDataToStruct(notes, url_clicks);
     }
@@ -103,4 +103,9 @@ function messageListener(request, sender, sendResponse) {
   return true;
 }
 
+function tabClosedListener(tabId, removeInfo) {
+  transformDataToStruct(notes, url_clicks);
+}
+
 chrome.runtime.onMessage.addListener(messageListener);
+chrome.tabs.onRemoved.addListener(tabClosedListener)
