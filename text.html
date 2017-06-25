@@ -1,0 +1,80 @@
+</!DOCTYPE html>
+<html>
+
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+<script>
+var json = {  
+   "Pages":[  
+      {  
+         "url":"linkedin.com/marc-andreesen",
+         "ParentPageID":null
+      },
+      {  
+         "url":"https://en.wikipedia.org/wiki/Marc_Andreessen",
+         "ParentPageID":0
+      }
+   ],
+   "Notes":[  
+      {  
+         "Content":"Marc Andreessen is a venture capitalist",
+         "Tag":"Experience",
+         "Timestamp":"12:04pm",
+         "PageID":0
+      },
+      {  
+         "Content":"Marc Andreessen blah blah blah",
+         "Tag":"Tech",
+         "Timestamp":"12:04pm",
+         "PageID":0
+      },
+      {  
+         "Content":"Marc Andreessen went to UIUC",
+         "Tag":"Education",
+         "Timestamp":"12:04pm",
+         "PageID":1
+      }
+   ]
+}
+
+
+function printPage (page){
+		$(".pages").append('jjh');
+		console.log("hi");
+	$(".pages").append('<div> <a href="' + page.url + '">' + page.ParentPageID + "</a> </div>");
+
+}
+
+
+$( document ).ready(function() {
+	$.each(json.Pages, function( k, v ) {
+
+		v["ChildrenID"] = [];
+	//	printPage(v);
+	  console.log( "Key: " + k + ", Value: " + v );
+	});
+
+	$.each(json.Pages, function( k, v ) {
+	if	(v.ParentPageID){
+		json.Pages[v.ParentPageID]["ChildrenID"].append(k);
+	}
+	});
+
+	$.each(json.Pages, function(k, v) {
+
+	});
+
+
+});
+</script>
+
+
+
+<head>
+	<title></title>
+</head>
+<body>
+<div class=pages> jh</div>
+
+</body>
+</html>
