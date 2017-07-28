@@ -6,14 +6,14 @@ let actualLastTag = '';
 let currentTextSelection = "";
 
 window.onload = function() {
-    var observed = document.getElementsByTagName('a');
+  var observed = document.getElementsByTagName('a');
 
-    for (var i = 0; i < observed.length; i++) {
-        observed[i].addEventListener('click', function (e) {
-            debugger;
-            sendUrlInfo(e.target.href);
-        });
-    }
+  for (var i = 0; i < observed.length; i++) {
+    observed[i].addEventListener('click', function (e) {
+      debugger;
+      sendUrlInfo(e.target.href);
+    });
+  }
 }
 
 function setupTagInput() {
@@ -37,7 +37,7 @@ function getAllLinksInPage() {
 
   for (var i = document.links.length; i-- > 0;)
     urls.push(document.links[i].href);
-  
+
   return urls;
 }
 
@@ -104,7 +104,7 @@ function keyPressListener(e) {
       lastTag = e.target.value;
       actualLastTag = lastTag;
     }
-    
+
     highlightSelection(lastTag);
     console.log('Adding a tag...', lastTag);
 
@@ -119,7 +119,7 @@ function keyPressListener(e) {
     chrome.runtime.sendMessage(messageRequest, (response) => {
       console.log(response);
     });
-    
+
     tagInput.style.display = "none";
   }
 }
