@@ -22174,7 +22174,7 @@ var Root = (function (_super) {
         return _this;
     }
     Root.prototype.componentDidUpdate = function (prevProps, prevState) {
-        var links = document.getElementByClassName("rst__rowSubtitle");
+        var links = document.getElementsByClassName("rst__rowSubtitle");
         for (var i = 0; i < links.length; i++) {
             links[i].onclick = function (e) {
                 console.log('link clicked!');

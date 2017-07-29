@@ -101,7 +101,7 @@ class Root extends React.Component<RootProps, RootState> {
     };
   }
   componentDidUpdate(prevProps: RootProps, prevState: RootState) {
-    const links = document.getElementByClassName("rst__rowSubtitle");
+    const links = document.getElementsByClassName("rst__rowSubtitle");
     for (let i = 0; i < links.length; i++) {
       links[i].onclick = (e) => {
          console.log('link clicked!');
